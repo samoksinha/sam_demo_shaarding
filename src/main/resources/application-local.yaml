@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: sam_demo_sharding
+  datasource:
+    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
+    url: jdbc:shardingsphere:classpath:sharding.yaml
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+
+server:
+  port: 5001
+  servlet:
+    context-path: /sam/demo/sharding
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+
+logging:
+  level:
+    org.apache.shardingsphere: DEBUG

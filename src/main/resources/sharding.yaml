@@ -1,0 +1,135 @@
+mode:
+  type: Cluster
+  repository:
+    type: ZooKeeper
+    props:
+      namespace: sharding-sphere-cluster
+      server-lists: localhost:2181
+      retryIntervalMilliseconds: 500
+      timeToLiveSeconds: 60
+      maxRetries: 3
+      overwrite: true
+
+dataSources:
+  master_0:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3306/order_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: user
+    password: 1234
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 65
+    minPoolSize: 1
+  slave_0_0:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3307/order_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: user
+    password: 1234
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 65
+    minPoolSize: 1
+  slave_0_1:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3308/order_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: user
+    password: 1234
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 65
+    minPoolSize: 1
+
+  master_1:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3316/order_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: user
+    password: 1234
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 65
+    minPoolSize: 1
+  slave_1_0:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3317/order_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: user
+    password: 1234
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 65
+    minPoolSize: 1
+  slave_1_1:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    jdbcUrl: jdbc:mysql://localhost:3318/order_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: user
+    password: 1234
+    connectionTimeoutMilliseconds: 30000
+    idleTimeoutMilliseconds: 60000
+    maxLifetimeMilliseconds: 1800000
+    maxPoolSize: 65
+    minPoolSize: 1
+
+rules:
+  - !SHARDING
+    tables:
+      t_order:
+        actualDataNodes: readwrite_ds_${0..1}.t_order
+        databaseStrategy:
+          standard:
+            shardingColumn: user_id
+            shardingAlgorithmName: custom_database_sharding_algorithm
+      t_order_item:
+        actualDataNodes: readwrite_ds_${0..1}.t_order_item
+        databaseStrategy:
+          standard:
+            shardingColumn: user_id
+            shardingAlgorithmName: custom_database_sharding_algorithm
+    shardingAlgorithms:
+      custom_database_sharding_algorithm:
+        type: CLASS_BASED
+        props:
+          strategy: STANDARD
+          algorithmClassName: com.sam.db.shard.read.write.split.sam_demo_sharding.hash.DatabaseShardingAlgorithm
+    bindingTables:
+      - t_order, t_order_item
+    defaultDatabaseStrategy:
+      none:
+    defaultTableStrategy:
+      none:
+
+  - !READWRITE_SPLITTING
+    dataSources:
+      readwrite_ds_0:
+        staticStrategy:
+          writeDataSourceName: master_0
+          readDataSourceNames:
+            - slave_0_0
+            - slave_0_1
+        loadBalancerName: readwrite_ds_0_load_balancer
+
+      readwrite_ds_1:
+        staticStrategy:
+          writeDataSourceName: master_1
+          readDataSourceNames:
+            - slave_1_0
+            - slave_1_1
+        loadBalancerName: readwrite_ds_1_load_balancer
+    loadBalancers:
+      readwrite_ds_0_load_balancer:
+        type: CUSTOM_READ_BALANCER
+      readwrite_ds_1_load_balancer:
+        type: CUSTOM_READ_BALANCER
+
+props:
+  proxy-hint-enabled: true
+  sql-show: true
