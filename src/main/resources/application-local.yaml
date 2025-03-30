@@ -3,7 +3,7 @@ spring:
     name: sam_demo_sharding
   datasource:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
-    url: jdbc:shardingsphere:classpath:sharding.yaml
+    url: jdbc:shardingsphere:classpath:sharding_local.yaml
   jpa:
     properties:
       hibernate:

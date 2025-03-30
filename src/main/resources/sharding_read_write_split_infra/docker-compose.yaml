@@ -1,6 +1,9 @@
 services:
   master_0:
     image: bitnami/mysql:latest
+    container_name: master_0
+    networks:
+      - sam_demo_sharding_network
     environment:
       MYSQL_REPLICATION_MODE: master
       MYSQL_DATABASE: order_db
@@ -18,6 +21,9 @@ services:
 
   slave_0_0:
     image: bitnami/mysql:latest
+    container_name: slave_0_0
+    networks:
+      - sam_demo_sharding_network
     depends_on:
       - master_0
     environment:
@@ -37,6 +43,9 @@ services:
 
   slave_0_1:
     image: bitnami/mysql:latest
+    container_name: slave_0_1
+    networks:
+      - sam_demo_sharding_network
     depends_on:
       - master_0
     environment:
@@ -56,6 +65,9 @@ services:
 
   master_1:
     image: bitnami/mysql:latest
+    container_name: master_1
+    networks:
+      - sam_demo_sharding_network
     environment:
       MYSQL_REPLICATION_MODE: master
       MYSQL_DATABASE: order_db
@@ -73,6 +85,9 @@ services:
 
   slave_1_0:
     image: bitnami/mysql:latest
+    container_name: slave_1_0
+    networks:
+      - sam_demo_sharding_network
     depends_on:
       - master_1
     environment:
@@ -92,6 +107,9 @@ services:
 
   slave_1_1:
     image: bitnami/mysql:latest
+    container_name: slave_1_1
+    networks:
+      - sam_demo_sharding_network
     depends_on:
       - master_1
     environment:
@@ -112,15 +130,55 @@ services:
   zookeeper:
     image: zookeeper:latest
     container_name: zookeeper_container
+    networks:
+      - sam_demo_sharding_network
     ports:
       - "2181:2181"
     environment:
-      ZOO_TICK_TIME: 2000
+      ZOO_TICK_TIME: 10000
       ZOO_INIT_LIMIT: 10
       ZOO_SYNC_LIMIT: 5
       ZOO_CLIENT_PORT: 2181
     volumes:
       - zookeeper_data:/data/zookeeper
+    restart: always
+
+  sam_demo_sharding_app_0:
+    image: sam_demo_sharding_app:latest
+    container_name: sam_demo_sharding_app_container_0
+    networks:
+      - sam_demo_sharding_network
+    depends_on:
+      - zookeeper
+      - master_0
+      - master_1
+      - slave_0_0
+      - slave_0_1
+      - slave_1_0
+      - slave_1_1
+    ports:
+      - "5011:5001"
+    environment:
+      - spring.profiles.active=dev
+    restart: always
+
+  sam_demo_sharding_app_1:
+    image: sam_demo_sharding_app:latest
+    container_name: sam_demo_sharding_app_container_1
+    networks:
+      - sam_demo_sharding_network
+    depends_on:
+      - zookeeper
+      - master_0
+      - master_1
+      - slave_0_0
+      - slave_0_1
+      - slave_1_0
+      - slave_1_1
+    ports:
+      - "5012:5001"
+    environment:
+      - spring.profiles.active=dev
     restart: always
 
 volumes:
@@ -180,3 +238,7 @@ volumes:
       type: none
       o: bind
       device: C:/Study/docker_configs/mysql/master_1/init_scripts/
+
+networks:
+  sam_demo_sharding_network:
+    driver: bridge

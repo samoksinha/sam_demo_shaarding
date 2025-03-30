@@ -20,7 +20,7 @@ dataSources:
     connectionTimeoutMilliseconds: 30000
     idleTimeoutMilliseconds: 60000
     maxLifetimeMilliseconds: 1800000
-    maxPoolSize: 65
+    maxPoolSize: 10
     minPoolSize: 1
   slave_0_0:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
@@ -31,7 +31,7 @@ dataSources:
     connectionTimeoutMilliseconds: 30000
     idleTimeoutMilliseconds: 60000
     maxLifetimeMilliseconds: 1800000
-    maxPoolSize: 65
+    maxPoolSize: 10
     minPoolSize: 1
   slave_0_1:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
@@ -42,7 +42,7 @@ dataSources:
     connectionTimeoutMilliseconds: 30000
     idleTimeoutMilliseconds: 60000
     maxLifetimeMilliseconds: 1800000
-    maxPoolSize: 65
+    maxPoolSize: 10
     minPoolSize: 1
 
   master_1:
@@ -54,7 +54,7 @@ dataSources:
     connectionTimeoutMilliseconds: 30000
     idleTimeoutMilliseconds: 60000
     maxLifetimeMilliseconds: 1800000
-    maxPoolSize: 65
+    maxPoolSize: 10
     minPoolSize: 1
   slave_1_0:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
@@ -65,7 +65,7 @@ dataSources:
     connectionTimeoutMilliseconds: 30000
     idleTimeoutMilliseconds: 60000
     maxLifetimeMilliseconds: 1800000
-    maxPoolSize: 65
+    maxPoolSize: 10
     minPoolSize: 1
   slave_1_1:
     dataSourceClassName: com.zaxxer.hikari.HikariDataSource
@@ -76,7 +76,7 @@ dataSources:
     connectionTimeoutMilliseconds: 30000
     idleTimeoutMilliseconds: 60000
     maxLifetimeMilliseconds: 1800000
-    maxPoolSize: 65
+    maxPoolSize: 10
     minPoolSize: 1
 
 rules:
