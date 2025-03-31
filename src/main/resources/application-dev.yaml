@@ -24,3 +24,5 @@ springdoc:
 logging:
   level:
     org.apache.shardingsphere: DEBUG
+    io.seata: DEBUG
+

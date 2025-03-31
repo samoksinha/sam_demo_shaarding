@@ -7,5 +7,5 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableJpaAuditing
 @EnableTransactionManagement
-public class JpaConfiguration {
+public class TransactionConfiguration {
 }

@@ -1,14 +1,3 @@
-mode:
-  type: Cluster
-  repository:
-    type: ZooKeeper
-    props:
-      namespace: sharding-sphere-cluster
-      server-lists: localhost:2181
-      retryIntervalMilliseconds: 500
-      timeToLiveSeconds: 60
-      maxRetries: 3
-      overwrite: true
 
 dataSources:
   master_0:
@@ -129,6 +118,10 @@ rules:
         type: CUSTOM_READ_BALANCER
       readwrite_ds_1_load_balancer:
         type: CUSTOM_READ_BALANCER
+
+  - !TRANSACTION
+    defaultType: BASE
+    providerType: seata
 
 props:
   proxy-hint-enabled: true

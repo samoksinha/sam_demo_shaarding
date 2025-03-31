@@ -31,7 +31,10 @@ dependencies {
 	implementation("org.apache.shardingsphere:shardingsphere-jdbc-core:5.3.2")
 	implementation("org.apache.shardingsphere:shardingsphere-cluster-mode-core:5.3.2")
 	implementation("org.apache.shardingsphere:shardingsphere-cluster-mode-repository-zookeeper:5.3.2")
-	implementation("org.apache.shardingsphere:shardingsphere-cluster-mode-repository-api:5.3.2")
+	implementation("org.apache.shardingsphere:shardingsphere-transaction-base-seata-at:5.3.2")
+	implementation("org.apache.seata:seata-all:2.2.0") {
+		exclude(group: 'org.antlr', module: 'antlr4-runtime')
+	}
 
 	implementation("org.yaml:snakeyaml:1.33")
 	implementation("com.squareup.okhttp3:okhttp:3.14.9")

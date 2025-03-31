@@ -130,6 +130,10 @@ rules:
       readwrite_ds_1_load_balancer:
         type: CUSTOM_READ_BALANCER
 
+  - !TRANSACTION
+    defaultType: BASE
+    providerType: seata
+
 props:
   proxy-hint-enabled: true
   sql-show: true
