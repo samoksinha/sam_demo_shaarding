@@ -49,29 +49,37 @@ public class OrderService {
             item.setTOrderEntity(order);
         });
 
+        //TOrderEntity entity = orderRepository.save(order);
+        //Hibernate.initialize(entity.getOrderItems());
         return this.tOrderMapper.toModel(orderRepository.save(order));
     }
 
     @Transactional
     public List<TOrderModel> findAllUsersOrders() {
+        //List<TOrderEntity> entities = orderRepository.findAll();
         return this.tOrderListMapper.toModelList(orderRepository.findAll());
     }
 
     @Transactional
     public TOrderModel findByOrderId(String orderId) {
+        //List<TOrderEntity> entities = orderRepository.findOrderByOrderId(orderId);
         return this.tOrderMapper.toModel(orderRepository
                 .findOrderByOrderId(orderId).stream().findFirst().orElse(null));
     }
 
     @Transactional
     public List<TOrderModel> findByUserId(String userId) {
+        //List<TOrderEntity> entities = orderRepository.findOrdersByUserId(userId);
         return this.tOrderListMapper.toModelList(orderRepository.findOrdersByUserId(userId));
     }
 
     @Transactional
     public TOrderModel findByUserIdOrderId(String userId, String orderId) {
+        //List<TOrderEntity> entities = orderRepository.findOrderByUserIdAndOrderId(userId, orderId);
+        /*entities.forEach(entity
+                -> Hibernate.initialize(entity.getOrderItems()));*/
         return this.tOrderMapper.toModel(orderRepository
-                        .findOrderByUserIdAndOrderId(userId, orderId).stream().findFirst().orElse(null));
+                .findOrderByUserIdAndOrderId(userId, orderId).stream().findFirst().orElse(null));
     }
 
 }
