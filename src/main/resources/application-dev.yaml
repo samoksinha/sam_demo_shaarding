@@ -15,6 +15,53 @@ server:
   servlet:
     context-path: /sam/demo/sharding
 
+seata:
+  enabled: true
+  tx-service-group: sam_demo_sharding_tx_group
+
+  at:
+    enabled: true
+
+  client:
+    undo:
+      data-validation: true
+      log-serialization: jackson
+      log-table: undo_log
+      only-care-update-columns: true
+      compress:
+        enable: true
+        type: zip
+        threshold: 64k
+
+  service:
+    vgroup-mapping:
+      sam_demo_sharding_tx_group: default
+    grouplist:
+      default: sharding_seata_server:8091
+
+    disable-global-transaction: false
+    max-commit-timeout: 60000
+    max-rollback-timeout: 60000
+    max-transaction-timeout: 60000
+    max-retry-attempts: 5
+
+  config:
+    zk:
+      server-addr: zookeeper:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+      username:
+      password:
+      node-path: /seata/seata.properties
+
+  registry:
+    zk:
+      server-addr: zookeeper:2181
+      session-timeout: 6000
+      connect-timeout: 2000
+      username:
+      password:
+
 springdoc:
   api-docs:
     enabled: true
